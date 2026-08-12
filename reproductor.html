@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tocadiscos</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --bg:#161311;
+  --panel:#211d19;
+  --line:#3a332c;
+  --cream:#efe6d8;
+  --dim:#93887a;
+  --amber:#e0a63e;
+  --rust:#c15a3e;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--cream);
+  font-family:'JetBrains Mono',monospace;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:32px 16px;
+}
+.app{width:100%;max-width:520px;}
+h1{
+  font-family:'DM Serif Display',serif;
+  font-style:italic;
+  font-weight:400;
+  font-size:34px;
+  margin:0 0 4px;
+  letter-spacing:.5px;
+}
+.sub{color:var(--dim);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:28px;}
+
+.gate{
+  background:var(--panel);border:1px solid var(--line);border-radius:4px;
+  padding:32px 20px;text-align:center;
+}
+.gate p{color:var(--dim);font-size:13px;line-height:1.6;margin:0 0 18px;}
+#signinBtn{display:flex;justify-content:center;}
+.status{font-size:12px;color:var(--dim);margin-top:14px;}
+.status.err{color:var(--rust);}
+
+.hidden{display:none !important;}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.who{font-size:12px;color:var(--dim);}
+.who b{color:var(--cream);}
+.signout{background:none;border:1px solid var(--line);color:var(--dim);font-family:inherit;font-size:11px;padding:6px 10px;border-radius:3px;cursor:pointer;}
+.signout:hover{border-color:var(--rust);color:var(--rust);}
+
+.deck{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding:20px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:4px;
+  margin-bottom:20px;
+}
+.vinyl-wrap{position:relative;width:96px;height:96px;flex-shrink:0;cursor:pointer;}
+.vinyl{
+  width:96px;height:96px;border-radius:50%;
+  background:
+    repeating-radial-gradient(circle at center, #0c0a09 0 2px, #221e1a 2px 4px);
+  border:1px solid #000;
+  display:flex;align-items:center;justify-content:center;
+  animation:spin 6s linear infinite;
+  animation-play-state:paused;
+}
+.vinyl.playing{animation-play-state:running;}
+.vinyl-label{width:32px;height:32px;border-radius:50%;background:var(--amber);}
+@keyframes spin{to{transform:rotate(360deg);}}
+.arm{
+  position:absolute;top:-6px;right:-10px;
+  width:44px;height:4px;background:var(--dim);
+  border-radius:2px;transform-origin:right center;
+  transform:rotate(-28deg);
+  transition:transform .4s ease;
+}
+.arm.playing{transform:rotate(-6deg);}
+
+.now{flex:1;min-width:0;}
+.now-title{font-size:15px;color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.now-empty{font-size:13px;color:var(--dim);}
+.transport{display:flex;gap:10px;margin-top:10px;}
+.transport button{
+  background:none;border:1px solid var(--line);color:var(--cream);
+  width:32px;height:32px;border-radius:3px;cursor:pointer;font-size:13px;
+}
+.transport button:hover{border-color:var(--amber);color:var(--amber);}
+.transport button.play{background:var(--amber);color:#161311;border-color:var(--amber);font-weight:700;}
+
+.seek{width:100%;margin-top:12px;accent-color:var(--amber);}
+.times{display:flex;justify-content:space-between;font-size:10px;color:var(--dim);margin-top:2px;}
+
+.list-head{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:8px;display:flex;justify-content:space-between;}
+.track{
+  display:flex;align-items:center;gap:12px;padding:11px 4px;
+  border-bottom:1px solid var(--line);cursor:pointer;
+}
+.track:hover{background:#1c1815;}
+.track.active .track-title{color:var(--amber);}
+.track-num{width:20px;font-size:11px;color:var(--dim);text-align:right;flex-shrink:0;}
+.track-title{flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.spinner{font-size:11px;color:var(--dim);flex-shrink:0;}
+.empty-list{color:var(--dim);font-size:13px;padding:20px 4px;text-align:center;}
+.reload{background:none;border:1px solid var(--line);color:var(--dim);font-family:inherit;font-size:11px;padding:5px 9px;border-radius:3px;cursor:pointer;}
+.reload:hover{border-color:var(--amber);color:var(--amber);}
+
+audio{display:none;}
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>El Sueño del Gigante</h1>
+  <div class="sub">Playlist privada desde drive</div>
+
+  <div id="gate" class="gate">
+    <p>Inicia sesión con la cuenta de Google que tiene acceso a la carpeta compartida para escuchar las pistas.</p>
+    <div id="signinBtn"></div>
+    <div id="gateStatus" class="status"></div>
+  </div>
+
+  <div id="playerWrap" class="hidden">
+    <div class="topbar">
+      <div class="who">Conectado como <b id="whoEmail"></b></div>
+      <button class="signout" id="signoutBtn">Salir</button>
+    </div>
+
+    <div class="deck">
+      <div class="vinyl-wrap" id="vinylWrap">
+        <div class="vinyl" id="vinyl"><div class="vinyl-label"></div></div>
+        <div class="arm" id="arm"></div>
+      </div>
+      <div class="now">
+        <div id="nowTitle" class="now-empty">Sin pista seleccionada</div>
+        <div class="transport">
+          <button id="prevBtn">⏮</button>
+          <button id="playBtn" class="play">▶</button>
+          <button id="nextBtn">⏭</button>
+        </div>
+        <input type="range" class="seek" id="seek" value="0" min="0" max="100" step="0.1">
+        <div class="times"><span id="tCur">0:00</span><span id="tDur">0:00</span></div>
+      </div>
+    </div>
+
+    <div class="list-head">
+      <span>Playlist</span>
+      <button class="reload" id="reloadBtn">↻ recargar</button>
+    </div>
+    <div id="trackList"></div>
+  </div>
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+/* ====== CONFIGURACIÓN ====== */
+const CLIENT_ID = '1083303132992-ur5pjan2b5mtmfmgvluuc12m432os8r2.apps.googleusercontent.com';
+const FOLDER_ID = '1se2ir-bjD-TBT-Ukj2AksgixzdYcxUnS';
+const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
+/* ============================ */
+
+let accessToken = null;
+let tokenClient = null;
+let tracks = [];
+let currentIndex = -1;
+let currentObjectUrl = null;
+
+const gate = document.getElementById('gate');
+const gateStatus = document.getElementById('gateStatus');
+const playerWrap = document.getElementById('playerWrap');
+const whoEmail = document.getElementById('whoEmail');
+const signoutBtn = document.getElementById('signoutBtn');
+const reloadBtn = document.getElementById('reloadBtn');
+
+const audio = document.getElementById('audio');
+const vinyl = document.getElementById('vinyl');
+const arm = document.getElementById('arm');
+const vinylWrap = document.getElementById('vinylWrap');
+const nowTitle = document.getElementById('nowTitle');
+const playBtn = document.getElementById('playBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const seek = document.getElementById('seek');
+const tCur = document.getElementById('tCur');
+const tDur = document.getElementById('tDur');
+const trackList = document.getElementById('trackList');
+
+function fmt(sec){
+  if(!isFinite(sec)) return '0:00';
+  const m = Math.floor(sec/60);
+  const s = Math.floor(sec%60).toString().padStart(2,'0');
+  return `${m}:${s}`;
+}
+
+window.onload = () => {
+  if(!window.google || !google.accounts){
+    gateStatus.textContent = 'No se pudo cargar el login de Google. Revisa tu conexión y recarga.';
+    gateStatus.classList.add('err');
+    return;
+  }
+  tokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: CLIENT_ID,
+    scope: SCOPES,
+    callback: (resp) => {
+      if(resp.error){
+        gateStatus.textContent = 'No se pudo iniciar sesión: ' + resp.error;
+        gateStatus.classList.add('err');
+        return;
+      }
+      accessToken = resp.access_token;
+      onSignedIn();
+    }
+  });
+
+  document.getElementById('signinBtn').innerHTML =
+    '<button id="realSigninBtn" style="background:var(--amber);color:#161311;border:none;padding:10px 18px;border-radius:3px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;">Iniciar sesión con Google</button>';
+  document.getElementById('realSigninBtn').addEventListener('click', () => {
+    gateStatus.textContent = '';
+    gateStatus.classList.remove('err');
+    tokenClient.requestAccessToken();
+  });
+};
+
+async function onSignedIn(){
+  gate.classList.add('hidden');
+  playerWrap.classList.remove('hidden');
+  try{
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    const info = await res.json();
+    whoEmail.textContent = info.email || '—';
+  }catch(e){
+    whoEmail.textContent = 'sesión activa';
+  }
+  loadTracks();
+}
+
+signoutBtn.addEventListener('click', () => {
+  if(accessToken){
+    google.accounts.oauth2.revoke(accessToken, () => {});
+  }
+  accessToken = null;
+  tracks = [];
+  currentIndex = -1;
+  audio.pause();
+  audio.src = '';
+  playerWrap.classList.add('hidden');
+  gate.classList.remove('hidden');
+});
+
+reloadBtn.addEventListener('click', loadTracks);
+
+async function loadTracks(){
+  trackList.innerHTML = '<div class="empty-list">Cargando pistas…</div>';
+  try{
+    const q = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'audio/' and trashed = false`);
+    const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&orderBy=name&pageSize=200`;
+    const res = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+    if(!res.ok){
+      if(res.status === 403 || res.status === 401){
+        trackList.innerHTML = '<div class="empty-list">Sin permiso para ver la carpeta. Confirma que tu cuenta esté agregada como usuario de prueba y que la carpeta esté compartida contigo.</div>';
+      } else {
+        trackList.innerHTML = '<div class="empty-list">Error al listar archivos ('+res.status+').</div>';
+      }
+      return;
+    }
+    const data = await res.json();
+    tracks = (data.files || []).map(f => ({ id: f.id, title: f.name }));
+    renderList();
+  }catch(e){
+    trackList.innerHTML = '<div class="empty-list">Error de red al listar la carpeta.</div>';
+  }
+}
+
+function renderList(){
+  if(tracks.length===0){
+    trackList.innerHTML = '<div class="empty-list">No se encontraron archivos de audio en la carpeta.</div>';
+    return;
+  }
+  trackList.innerHTML = tracks.map((t,i)=>`
+    <div class="track ${i===currentIndex?'active':''}" data-i="${i}">
+      <div class="track-num">${i+1}</div>
+      <div class="track-title">${t.title}</div>
+      <div class="spinner" id="spin-${i}"></div>
+    </div>
+  `).join('');
+  trackList.querySelectorAll('.track').forEach(el=>{
+    el.addEventListener('click', ()=> playIndex(parseInt(el.dataset.i)));
+  });
+}
+
+async function playIndex(i){
+  if(i<0 || i>=tracks.length) return;
+  currentIndex = i;
+  renderList();
+  const spin = document.getElementById('spin-'+i);
+  if(spin) spin.textContent = 'cargando…';
+  nowTitle.textContent = tracks[i].title;
+  nowTitle.className = '';
+
+  try{
+    const res = await fetch(`https://www.googleapis.com/drive/v3/files/${tracks[i].id}?alt=media`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    if(!res.ok){
+      nowTitle.textContent = 'No se pudo cargar la pista ('+res.status+')';
+      return;
+    }
+    const blob = await res.blob();
+    if(currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
+    currentObjectUrl = URL.createObjectURL(blob);
+    audio.src = currentObjectUrl;
+    await audio.play();
+  }catch(e){
+    nowTitle.textContent = 'Error al reproducir la pista';
+  }finally{
+    if(spin) spin.textContent = '';
+  }
+}
+
+function setPlayingUI(playing){
+  playBtn.textContent = playing ? '❚❚' : '▶';
+  vinyl.classList.toggle('playing', playing);
+  arm.classList.toggle('playing', playing);
+}
+
+playBtn.addEventListener('click', ()=>{
+  if(currentIndex===-1){
+    if(tracks.length>0) playIndex(0);
+    return;
+  }
+  if(audio.paused) audio.play(); else audio.pause();
+});
+vinylWrap.addEventListener('click', ()=>playBtn.click());
+prevBtn.addEventListener('click', ()=>{ if(currentIndex>0) playIndex(currentIndex-1); });
+nextBtn.addEventListener('click', ()=>{ if(currentIndex<tracks.length-1) playIndex(currentIndex+1); });
+
+audio.addEventListener('play', ()=>setPlayingUI(true));
+audio.addEventListener('pause', ()=>setPlayingUI(false));
+audio.addEventListener('ended', ()=>{ if(currentIndex<tracks.length-1) playIndex(currentIndex+1); else setPlayingUI(false); });
+audio.addEventListener('timeupdate', ()=>{
+  if(audio.duration){
+    seek.value = (audio.currentTime/audio.duration)*100;
+    tCur.textContent = fmt(audio.currentTime);
+    tDur.textContent = fmt(audio.duration);
+  }
+});
+seek.addEventListener('input', ()=>{
+  if(audio.duration) audio.currentTime = (seek.value/100)*audio.duration;
+});
+</script>
+</body>
+</html>
