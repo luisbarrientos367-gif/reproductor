@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Playlist_ESG</title>
-<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Playlist_ESG%22,%22short_name%22:%22Playlist_ESG%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23120f14%22,%22theme_color%22:%22%23120f14%22}">
+<title>Tocadiscos</title>
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Tocadiscos%22,%22short_name%22:%22Tocadiscos%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23120f14%22,%22theme_color%22:%22%23120f14%22}">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -65,6 +65,22 @@ body{
   margin-bottom:18px;
   box-shadow:0 20px 40px -12px rgba(0,0,0,.6);
 }
+.mini-vinyl{
+  position:absolute;
+  bottom:14px;right:14px;
+  width:52px;height:52px;
+  border-radius:50%;
+  background:repeating-radial-gradient(circle at center, #0c0a09 0 2px, #221e1a 2px 4px);
+  border:1px solid rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+  z-index:2;
+  animation:spin 5s linear infinite;
+  animation-play-state:paused;
+  box-shadow:0 6px 16px rgba(0,0,0,.5);
+}
+.mini-vinyl.playing{animation-play-state:running;}
+.mini-vinyl-label{width:18px;height:18px;border-radius:50%;background:var(--accent);}
+@keyframes spin{to{transform:rotate(360deg);}}
 .art-title{
   position:relative;
   z-index:1;
@@ -108,10 +124,13 @@ body{
 .reload:hover{border-color:var(--accent);color:var(--accent);}
 .track{
   display:flex;align-items:center;gap:12px;padding:10px 4px;
-  border-radius:10px;cursor:pointer;
+  cursor:pointer;
+  border-bottom:1px solid var(--line);
 }
+.track:last-child{border-bottom:none;}
 .track:hover{background:var(--panel);}
 .track.active .track-title{color:var(--accent);}
+.track-num{width:18px;font-size:11px;color:var(--dim);text-align:right;flex-shrink:0;font-family:'JetBrains Mono',monospace;}
 .track-thumb{width:38px;height:38px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:rgba(255,255,255,.85);}
 .track-info{flex:1;min-width:0;}
 .track-title{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -143,8 +162,8 @@ audio{display:none;}
 <div class="app">
 
   <div id="gate" class="gate-wrap">
-    <h1>El Sueño del Gigante</h1>
-    <div class="sub">Playlist privada, desde drive</div>
+    <h1>Tocadiscos</h1>
+    <div class="sub">tu playlist privada, servida desde drive</div>
     <div class="gate">
       <p>Inicia sesión con la cuenta de Google que tiene acceso a la carpeta compartida para escuchar las pistas.</p>
       <div id="signinBtn"></div>
@@ -153,13 +172,20 @@ audio{display:none;}
   </div>
 
   <div id="playerWrap" class="hidden">
+    <div class="now-screen" style="padding-bottom:0;">
+      <h1 style="font-size:22px;margin:18px 0 2px;">El Sueño del Gigante</h1>
+      <div class="sub" style="margin-bottom:0;">Playlist privada, desde Drive</div>
+    </div>
     <div class="topbar">
       <div class="who">Conectado como <b id="whoEmail"></b></div>
       <button class="signout" id="signoutBtn">Salir</button>
     </div>
 
     <div class="now-screen">
-      <div class="art" id="art"><div class="art-title" id="artTitle"></div></div>
+      <div class="art" id="art">
+        <div class="art-title" id="artTitle"></div>
+        <div class="mini-vinyl" id="miniVinyl" style="display:none;"><div class="mini-vinyl-label"></div></div>
+      </div>
 
       <div class="waveform" id="waveform">
         <div class="wf-bars" id="wfBars"></div>
@@ -357,7 +383,8 @@ async function loadTracks(){
     tracks = (data.files || []).map(f => ({ id: f.id, title: f.name }));
     art.style.background = 'var(--panel)';
     artTitle.textContent = '';
-    art.innerHTML = '<div class="art-empty">Elige una pista para empezar</div>';
+    artTitle.className = 'art-empty';
+    artTitle.textContent = 'Elige una pista para empezar';
     renderList();
   }catch(e){
     trackList.innerHTML = '<div class="empty-list">Error de red al listar la carpeta.</div>';
@@ -371,6 +398,7 @@ function renderList(){
   }
   trackList.innerHTML = tracks.map((t,i)=>`
     <div class="track ${i===currentIndex?'active':''}" data-i="${i}">
+      <div class="track-num">${i+1}</div>
       <div class="track-thumb" style="background:${gradientFor(t.title)}">${initialsFor(t.title)}</div>
       <div class="track-info">
         <div class="track-title">${t.title}</div>
@@ -389,8 +417,10 @@ async function playIndex(i){
   renderList();
 
   const title = tracks[i].title;
-  art.innerHTML = `<div class="art-title" id="artTitleLive">${title}</div>`;
+  artTitle.className = 'art-title';
+  artTitle.textContent = title;
   art.style.background = gradientFor(title);
+  document.getElementById('miniVinyl').style.display = 'flex';
   renderWaveform(title);
   miniplayer.classList.remove('hidden');
   miniThumb.style.background = gradientFor(title);
@@ -454,7 +484,7 @@ async function preloadNext(i){
 
 function updateMediaSession(title){
   if(!('mediaSession' in navigator)) return;
-  navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: 'Playlist_El Sueño del Gigante' });
+  navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: 'Tocadiscos' });
   navigator.mediaSession.setActionHandler('play', () => audio.play());
   navigator.mediaSession.setActionHandler('pause', () => audio.pause());
   navigator.mediaSession.setActionHandler('previoustrack', () => prevBtn.click());
@@ -465,6 +495,7 @@ function setPlayingUI(playing){
   const icon = playing ? '❚❚' : '▶';
   playBtn.textContent = icon;
   miniPlayBtn.textContent = icon;
+  document.getElementById('miniVinyl').classList.toggle('playing', playing);
   if('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
 }
 
