@@ -65,22 +65,6 @@ body{
   margin-bottom:18px;
   box-shadow:0 20px 40px -12px rgba(0,0,0,.6);
 }
-.mini-vinyl{
-  position:absolute;
-  bottom:14px;right:14px;
-  width:52px;height:52px;
-  border-radius:50%;
-  background:repeating-radial-gradient(circle at center, #0c0a09 0 2px, #221e1a 2px 4px);
-  border:1px solid rgba(0,0,0,.5);
-  display:flex;align-items:center;justify-content:center;
-  z-index:2;
-  animation:spin 5s linear infinite;
-  animation-play-state:paused;
-  box-shadow:0 6px 16px rgba(0,0,0,.5);
-}
-.mini-vinyl.playing{animation-play-state:running;}
-.mini-vinyl-label{width:18px;height:18px;border-radius:50%;background:var(--accent);}
-@keyframes spin{to{transform:rotate(360deg);}}
 .art-title{
   position:relative;
   z-index:1;
@@ -184,7 +168,6 @@ audio{display:none;}
     <div class="now-screen">
       <div class="art" id="art">
         <div class="art-title" id="artTitle"></div>
-        <div class="mini-vinyl" id="miniVinyl" style="display:none;"><div class="mini-vinyl-label"></div></div>
       </div>
 
       <div class="waveform" id="waveform">
@@ -216,6 +199,7 @@ audio{display:none;}
     <div class="mini-thumb" id="miniThumb"></div>
     <div class="mini-title" id="miniTitle">—</div>
     <button class="mini-play" id="miniPlayBtn">▶</button>
+    <button class="mini-play" id="miniNextBtn">⏭</button>
   </div>
 </div>
 
@@ -420,7 +404,6 @@ async function playIndex(i){
   artTitle.className = 'art-title';
   artTitle.textContent = title;
   art.style.background = gradientFor(title);
-  document.getElementById('miniVinyl').style.display = 'flex';
   renderWaveform(title);
   miniplayer.classList.remove('hidden');
   miniThumb.style.background = gradientFor(title);
@@ -495,7 +478,6 @@ function setPlayingUI(playing){
   const icon = playing ? '❚❚' : '▶';
   playBtn.textContent = icon;
   miniPlayBtn.textContent = icon;
-  document.getElementById('miniVinyl').classList.toggle('playing', playing);
   if('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
 }
 
@@ -508,6 +490,7 @@ function togglePlay(){
 }
 playBtn.addEventListener('click', togglePlay);
 miniPlayBtn.addEventListener('click', togglePlay);
+document.getElementById('miniNextBtn').addEventListener('click', ()=> nextBtn.click());
 
 function pickNextIndex(){
   if(shuffleOn){
