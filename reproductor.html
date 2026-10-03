@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tocadiscos</title>
-<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Tocadiscos%22,%22short_name%22:%22Tocadiscos%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23120f14%22,%22theme_color%22:%22%23120f14%22}">
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22Tocadiscos%22,%22short_name%22:%22Tocadiscos%22,%22start_url%22:%22https://luisbarrientos367-gif.github.io/reproductor/reproductor.html%22,%22scope%22:%22https://luisbarrientos367-gif.github.io/reproductor/%22,%22display%22:%22standalone%22,%22background_color%22:%22%23120f14%22,%22theme_color%22:%22%23120f14%22}">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -257,6 +257,23 @@ function fmt(sec){
   return `${m}:${s}`;
 }
 
+async function fetchTrackBlob(id, attempt = 1){
+  try{
+    const res = await fetch(`https://www.googleapis.com/drive/v3/files/${id}?alt=media`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const blob = await res.blob();
+    return URL.createObjectURL(blob);
+  }catch(e){
+    if(attempt < 3){
+      await new Promise(r => setTimeout(r, 1500 * attempt));
+      return fetchTrackBlob(id, attempt + 1);
+    }
+    throw e;
+  }
+}
+
 /* --- estética generada por canción --- */
 function hashStr(str){
   let h = 0;
@@ -418,15 +435,7 @@ async function playIndex(i){
       preloaded = { index: -1, url: null };
     }else{
       if(spin) spin.textContent = 'cargando…';
-      const res = await fetch(`https://www.googleapis.com/drive/v3/files/${tracks[i].id}?alt=media`, {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      });
-      if(!res.ok){
-        if(spin) spin.textContent = 'error ('+res.status+')';
-        return;
-      }
-      const blob = await res.blob();
-      blobUrl = URL.createObjectURL(blob);
+      blobUrl = await fetchTrackBlob(tracks[i].id);
     }
     if(currentObjectUrl) URL.revokeObjectURL(currentObjectUrl);
     currentObjectUrl = blobUrl;
@@ -444,17 +453,12 @@ async function playIndex(i){
 }
 
 async function preloadNext(i){
-  if(shuffleOn || repeatMode === 'one') return; // precarga solo aplica a avance secuencial simple
+  if(shuffleOn || repeatMode === 'one') return;
   const nextIndex = i + 1;
   if(nextIndex >= tracks.length) return;
   if(preloaded.index === nextIndex) return;
   try{
-    const res = await fetch(`https://www.googleapis.com/drive/v3/files/${tracks[nextIndex].id}?alt=media`, {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
-    if(!res.ok) return;
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
+    const url = await fetchTrackBlob(tracks[nextIndex].id);
     if(currentIndex === i){
       preloaded = { index: nextIndex, url };
     }else{
