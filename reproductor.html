@@ -32,110 +32,113 @@ body{
 }
 .app{width:100%;max-width:420px;padding-bottom:90px;}
 
-/* --- gate --- */
 .gate-wrap{padding:32px 20px;}
 .gate-wrap h1{font-size:26px;margin:0 0 4px;}
 .gate-wrap .sub{color:var(--dim);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:28px;}
-.gate{
-  background:var(--panel);border:1px solid var(--line);border-radius:16px;
-  padding:32px 20px;text-align:center;
-}
+.gate{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:32px 20px;text-align:center;}
 .gate p{color:var(--dim);font-size:13px;line-height:1.6;margin:0 0 18px;}
 #signinBtn{display:flex;justify-content:center;}
 .status{font-size:12px;color:var(--dim);margin-top:14px;}
 .status.err{color:var(--rust);}
 .hidden{display:none !important;}
 
-/* --- top bar --- */
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 6px;}
 .who{font-size:11px;color:var(--dim);}
 .who b{color:var(--cream);}
 .signout{background:none;border:1px solid var(--line);color:var(--dim);font-family:inherit;font-size:11px;padding:6px 10px;border-radius:20px;cursor:pointer;}
 .signout:hover{border-color:var(--rust);color:var(--rust);}
 
+/* --- tabs --- */
+.tabs{display:flex;gap:8px;padding:10px 20px 4px;}
+.tab{
+  background:none;border:1px solid var(--line);color:var(--dim);
+  font-family:inherit;font-size:12px;padding:7px 14px;border-radius:20px;cursor:pointer;
+}
+.tab.active{background:var(--accent);color:#1a1320;border-color:var(--accent);font-weight:700;}
+.back-row{display:flex;align-items:center;gap:10px;padding:14px 20px 4px;}
+.back-btn{background:none;border:none;color:var(--cream);font-size:18px;cursor:pointer;}
+.view-title{font-size:16px;font-weight:700;}
+.view-sub{color:var(--dim);font-size:11px;}
+
+/* --- folder / playlist list cards --- */
+.card-list{padding:10px 20px;}
+.folder-card{
+  display:flex;align-items:center;gap:12px;padding:13px;margin-bottom:8px;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;cursor:pointer;
+}
+.folder-card:hover{border-color:var(--accent);}
+.folder-icon{width:40px;height:40px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--line);}
+.folder-icon.all{background:linear-gradient(135deg, var(--accent), var(--accent2));}
+.folder-name{font-size:14px;font-weight:600;}
+.folder-sub{font-size:11px;color:var(--dim);}
+.folder-del{margin-left:auto;background:none;border:none;color:var(--dim);font-size:14px;cursor:pointer;padding:4px 8px;}
+.folder-del:hover{color:var(--rust);}
+
+.new-playlist-btn{
+  width:100%;padding:13px;border-radius:14px;border:1px dashed var(--line);
+  background:none;color:var(--dim);font-family:inherit;font-size:13px;cursor:pointer;margin-bottom:8px;
+}
+.new-playlist-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+/* --- create playlist --- */
+.create-form{padding:10px 20px;}
+.create-form input{
+  width:100%;background:var(--panel);border:1px solid var(--line);color:var(--cream);
+  padding:11px 12px;border-radius:10px;font-family:inherit;font-size:14px;margin-bottom:14px;
+}
+.create-form input:focus{outline:none;border-color:var(--accent);}
+.pick-list{max-height:50vh;overflow-y:auto;margin-bottom:14px;}
+.pick-item{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid var(--line);}
+.pick-item input{width:auto;margin:0;}
+.pick-item label{font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.save-btn{
+  width:100%;padding:13px;border-radius:12px;border:none;
+  background:var(--accent);color:#1a1320;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;
+}
+
 /* --- now playing --- */
 .now-screen{padding:6px 20px 10px;}
 .art{
-  position:relative;
-  width:100%;
-  aspect-ratio:1/1;
-  border-radius:20px;
-  overflow:hidden;
-  display:flex;
-  align-items:flex-end;
-  margin-bottom:18px;
-  box-shadow:0 20px 40px -12px rgba(0,0,0,.6);
+  position:relative;width:100%;height:150px;border-radius:18px;overflow:hidden;
+  display:flex;align-items:flex-end;margin-bottom:16px;
+  box-shadow:0 14px 28px -10px rgba(0,0,0,.6);
 }
-.art-title{
-  position:relative;
-  z-index:1;
-  padding:20px;
-  font-size:26px;
-  font-weight:800;
-  line-height:1.15;
-  text-transform:uppercase;
-  letter-spacing:.01em;
-  text-shadow:0 2px 12px rgba(0,0,0,.5);
-}
-.art-empty{
-  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-  color:rgba(255,255,255,.5);font-size:13px;
-}
+.art-title{position:relative;z-index:1;padding:16px;font-size:18px;font-weight:800;line-height:1.2;text-transform:uppercase;text-shadow:0 2px 10px rgba(0,0,0,.5);}
+.art-empty{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:13px;}
 
-.waveform{position:relative;height:44px;cursor:pointer;margin-bottom:6px;}
+.waveform{position:relative;height:40px;cursor:pointer;margin-bottom:6px;}
 .wf-bars{display:flex;align-items:center;height:100%;gap:2px;}
 .wf-bars span{flex:1;background:var(--line);border-radius:2px;min-width:2px;}
 .wf-progress{position:absolute;top:0;left:0;height:100%;overflow:hidden;pointer-events:none;}
 .wf-progress .wf-bars span{background:var(--accent);}
-.times{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:22px;}
+.times{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);margin-bottom:18px;}
 
 .controls-row{display:flex;align-items:center;justify-content:space-between;padding:0 4px;}
-.ctrl-side{background:none;border:none;color:var(--dim);font-size:18px;cursor:pointer;width:36px;height:36px;border-radius:50%;}
+.ctrl-side{background:none;border:none;color:var(--dim);font-size:17px;cursor:pointer;width:34px;height:34px;border-radius:50%;}
 .ctrl-side.active{color:var(--accent);}
 .ctrl-side:hover{color:var(--cream);}
-.ctrl-mid{display:flex;align-items:center;gap:18px;}
-.ctrl-skip{background:none;border:none;color:var(--cream);font-size:20px;cursor:pointer;}
-.ctrl-play{
-  width:58px;height:58px;border-radius:50%;
-  background:var(--cream);color:var(--bg);border:none;
-  font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;
-}
+.ctrl-mid{display:flex;align-items:center;gap:16px;}
+.ctrl-skip{background:none;border:none;color:var(--cream);font-size:19px;cursor:pointer;}
+.ctrl-play{width:54px;height:54px;border-radius:50%;background:var(--cream);color:var(--bg);border:none;font-size:19px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 .ctrl-play:hover{background:var(--accent);}
 
-/* --- up next --- */
-.upnext{padding:22px 20px 0;}
-.list-head{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:10px;display:flex;justify-content:space-between;}
+.upnext{padding:18px 20px 0;}
+.list-head{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:8px;display:flex;justify-content:space-between;}
 .reload{background:none;border:1px solid var(--line);color:var(--dim);font-family:inherit;font-size:11px;padding:5px 9px;border-radius:20px;cursor:pointer;}
 .reload:hover{border-color:var(--accent);color:var(--accent);}
-.track{
-  display:flex;align-items:center;gap:12px;padding:10px 4px;
-  cursor:pointer;
-  border-bottom:1px solid var(--line);
-}
+.track{display:flex;align-items:center;gap:12px;padding:10px 4px;cursor:pointer;border-bottom:1px solid var(--line);}
 .track:last-child{border-bottom:none;}
 .track:hover{background:var(--panel);}
 .track.active .track-title{color:var(--accent);}
 .track-num{width:18px;font-size:11px;color:var(--dim);text-align:right;flex-shrink:0;font-family:'JetBrains Mono',monospace;}
-.track-thumb{width:38px;height:38px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:rgba(255,255,255,.85);}
+.track-thumb{width:36px;height:36px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:rgba(255,255,255,.85);}
 .track-info{flex:1;min-width:0;}
 .track-title{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .track-sub{font-size:11px;color:var(--dim);}
-.spinner{font-size:10px;color:var(--dim);flex-shrink:0;}
 .empty-list{color:var(--dim);font-size:13px;padding:24px 4px;text-align:center;}
 
-/* --- mini bar --- */
-.miniplayer{
-  position:fixed;bottom:0;left:0;right:0;
-  display:flex;justify-content:center;
-  pointer-events:none;
-}
-.miniplayer-inner{
-  pointer-events:auto;
-  width:100%;max-width:420px;
-  display:flex;align-items:center;gap:12px;
-  background:var(--panel);border-top:1px solid var(--line);
-  padding:10px 16px;
-}
+.miniplayer{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;pointer-events:none;}
+.miniplayer-inner{pointer-events:auto;width:100%;max-width:420px;display:flex;align-items:center;gap:12px;background:var(--panel);border-top:1px solid var(--line);padding:10px 16px;}
 .mini-thumb{width:34px;height:34px;border-radius:7px;flex-shrink:0;}
 .mini-title{flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .mini-play{background:none;border:none;color:var(--cream);font-size:18px;cursor:pointer;}
@@ -147,8 +150,8 @@ audio{display:none;}
 <div class="app">
 
   <div id="gate" class="gate-wrap">
-    <h1>Tocadiscos</h1>
-    <div class="sub">tu playlist privada, servida desde drive</div>
+    <h1>El Sueño del Gigante</h1>
+    <div class="sub">playlist privada, desde drive</div>
     <div class="gate">
       <p>Inicia sesión con la cuenta de Google que tiene acceso a la carpeta compartida para escuchar las pistas.</p>
       <div id="signinBtn"></div>
@@ -159,38 +162,76 @@ audio{display:none;}
   <div id="playerWrap" class="hidden">
     <div class="now-screen" style="padding-bottom:0;">
       <h1 style="font-size:22px;margin:18px 0 2px;">El Sueño del Gigante</h1>
-      <div class="sub" style="margin-bottom:0;">Playlist privada, desde Drive</div>
+      <div class="sub" style="margin-bottom:0;color:var(--dim);font-size:11px;letter-spacing:.08em;text-transform:uppercase;">Playlist privada, desde Drive</div>
     </div>
     <div class="topbar">
       <div class="who">Conectado como <b id="whoEmail"></b></div>
       <button class="signout" id="signoutBtn">Salir</button>
     </div>
 
-    <div class="now-screen">
-      <div class="art" id="art">
-        <div class="art-title" id="artTitle"></div>
-      </div>
+    <!-- TABS: carpetas / playlists -->
+    <div class="tabs" id="tabs">
+      <button class="tab active" id="tabFolders">Carpetas</button>
+      <button class="tab" id="tabPlaylists">Mis playlists</button>
+    </div>
 
-      <div class="waveform" id="waveform">
-        <div class="wf-bars" id="wfBars"></div>
-        <div class="wf-progress" id="wfProgress"><div class="wf-bars" id="wfBarsCopy"></div></div>
-      </div>
-      <div class="times"><span id="tCur">0:00</span><span id="tDur">0:00</span></div>
+    <!-- VISTA: lista de carpetas -->
+    <div id="viewFolders">
+      <div class="card-list" id="folderList"></div>
+    </div>
 
-      <div class="controls-row">
-        <button class="ctrl-side" id="shuffleBtn" title="Aleatorio">⤨</button>
-        <div class="ctrl-mid">
-          <button class="ctrl-skip" id="prevBtn">⏮</button>
-          <button class="ctrl-play" id="playBtn">▶</button>
-          <button class="ctrl-skip" id="nextBtn">⏭</button>
-        </div>
-        <button class="ctrl-side" id="repeatBtn" title="Repetir">↻</button>
+    <!-- VISTA: lista de playlists -->
+    <div id="viewPlaylists" class="hidden">
+      <div class="card-list">
+        <button class="new-playlist-btn" id="newPlaylistBtn">+ Crear nueva playlist</button>
+        <div id="playlistList"></div>
       </div>
     </div>
 
-    <div class="upnext">
-      <div class="list-head"><span>A continuación</span><button class="reload" id="reloadBtn">↻ recargar</button></div>
-      <div id="trackList"></div>
+    <!-- VISTA: crear playlist -->
+    <div id="viewCreate" class="hidden">
+      <div class="back-row">
+        <button class="back-btn" id="backFromCreate">←</button>
+        <div><div class="view-title">Nueva playlist</div><div class="view-sub">elige las canciones</div></div>
+      </div>
+      <div class="create-form">
+        <input id="playlistNameInput" placeholder="Nombre de la playlist">
+        <div class="pick-list" id="pickList"></div>
+        <button class="save-btn" id="savePlaylistBtn">Guardar playlist</button>
+      </div>
+    </div>
+
+    <!-- VISTA: reproductor -->
+    <div id="viewPlayer" class="hidden">
+      <div class="back-row">
+        <button class="back-btn" id="backFromPlayer">←</button>
+        <div><div class="view-title" id="queueTitle">—</div><div class="view-sub" id="queueSub"></div></div>
+      </div>
+
+      <div class="now-screen">
+        <div class="art" id="art"><div class="art-title" id="artTitle"></div></div>
+
+        <div class="waveform" id="waveform">
+          <div class="wf-bars" id="wfBars"></div>
+          <div class="wf-progress" id="wfProgress"><div class="wf-bars" id="wfBarsCopy"></div></div>
+        </div>
+        <div class="times"><span id="tCur">0:00</span><span id="tDur">0:00</span></div>
+
+        <div class="controls-row">
+          <button class="ctrl-side" id="shuffleBtn" title="Aleatorio">⤨</button>
+          <div class="ctrl-mid">
+            <button class="ctrl-skip" id="prevBtn">⏮</button>
+            <button class="ctrl-play" id="playBtn">▶</button>
+            <button class="ctrl-skip" id="nextBtn">⏭</button>
+          </div>
+          <button class="ctrl-side" id="repeatBtn" title="Repetir">↻</button>
+        </div>
+      </div>
+
+      <div class="upnext">
+        <div class="list-head"><span>A continuación</span><button class="reload" id="reloadBtn">↻ recargar</button></div>
+        <div id="trackList"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -209,18 +250,25 @@ audio{display:none;}
 <script>
 /* ====== CONFIGURACIÓN ====== */
 const CLIENT_ID = '1083303132992-ur5pjan2b5mtmfmgvluuc12m432os8r2.apps.googleusercontent.com';
-const FOLDER_ID = '1se2ir-bjD-TBT-Ukj2AksgixzdYcxUnS';
+const ROOT_FOLDER_ID = '1se2ir-bjD-TBT-Ukj2AksgixzdYcxUnS';
 const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
+const PLAYLIST_KEY = 'tocadiscos_playlists_v1';
 /* ============================ */
 
 let accessToken = null;
 let tokenClient = null;
-let tracks = [];
+
+let subfolders = [];         // [{id, name}]
+let libraryAll = [];         // [{id, title}] todas las canciones (raíz + subcarpetas), para armar playlists
+let playlists = [];          // [{id, name, tracks:[{id,title}]}]
+
+let tracks = [];             // cola actual en reproducción
+let queueLabel = '';
 let currentIndex = -1;
 let currentObjectUrl = null;
 let preloaded = { index: -1, url: null };
 let shuffleOn = false;
-let repeatMode = 'off'; // off | all | one
+let repeatMode = 'off';
 
 const gate = document.getElementById('gate');
 const gateStatus = document.getElementById('gateStatus');
@@ -229,6 +277,24 @@ const whoEmail = document.getElementById('whoEmail');
 const signoutBtn = document.getElementById('signoutBtn');
 const reloadBtn = document.getElementById('reloadBtn');
 
+const tabFolders = document.getElementById('tabFolders');
+const tabPlaylists = document.getElementById('tabPlaylists');
+const viewFolders = document.getElementById('viewFolders');
+const viewPlaylists = document.getElementById('viewPlaylists');
+const viewCreate = document.getElementById('viewCreate');
+const viewPlayer = document.getElementById('viewPlayer');
+const tabs = document.getElementById('tabs');
+const folderList = document.getElementById('folderList');
+const playlistList = document.getElementById('playlistList');
+const newPlaylistBtn = document.getElementById('newPlaylistBtn');
+const backFromCreate = document.getElementById('backFromCreate');
+const backFromPlayer = document.getElementById('backFromPlayer');
+const playlistNameInput = document.getElementById('playlistNameInput');
+const pickList = document.getElementById('pickList');
+const savePlaylistBtn = document.getElementById('savePlaylistBtn');
+const queueTitle = document.getElementById('queueTitle');
+const queueSub = document.getElementById('queueSub');
+
 const audio = document.getElementById('audio');
 const art = document.getElementById('art');
 const artTitle = document.getElementById('artTitle');
@@ -236,7 +302,6 @@ const wfBars = document.getElementById('wfBars');
 const wfBarsCopy = document.getElementById('wfBarsCopy');
 const wfProgress = document.getElementById('wfProgress');
 const waveform = document.getElementById('waveform');
-const nowTitle = artTitle;
 const playBtn = document.getElementById('playBtn');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
@@ -257,6 +322,25 @@ function fmt(sec){
   const s = Math.floor(sec%60).toString().padStart(2,'0');
   return `${m}:${s}`;
 }
+function hashStr(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31+str.charCodeAt(i))>>>0; } return h; }
+function gradientFor(title){
+  const h = hashStr(title);
+  const hue1 = h % 360;
+  const hue2 = (hue1 + 55 + (h % 40)) % 360;
+  return `linear-gradient(155deg, hsl(${hue1} 65% 32%), hsl(${hue2} 70% 22%))`;
+}
+function initialsFor(title){ return title.replace(/\.[a-zA-Z0-9]+$/,'').trim().slice(0,2).toUpperCase(); }
+function barsFor(title, count){
+  const h = hashStr(title); let bars=[];
+  for(let i=0;i<count;i++){ bars.push(20 + ((h >> (i%24)) & 0x3F) % 78); }
+  return bars;
+}
+function renderWaveform(title){
+  const bars = barsFor(title, 48);
+  const html = bars.map(v => `<span style="height:${v}%"></span>`).join('');
+  wfBars.innerHTML = html; wfBarsCopy.innerHTML = html;
+  wfProgress.style.width = '0%';
+}
 
 async function fetchTrackBlob(id, attempt = 1){
   try{
@@ -267,48 +351,12 @@ async function fetchTrackBlob(id, attempt = 1){
     const blob = await res.blob();
     return URL.createObjectURL(blob);
   }catch(e){
-    if(attempt < 3){
-      await new Promise(r => setTimeout(r, 1500 * attempt));
-      return fetchTrackBlob(id, attempt + 1);
-    }
+    if(attempt < 3){ await new Promise(r => setTimeout(r, 1500*attempt)); return fetchTrackBlob(id, attempt+1); }
     throw e;
   }
 }
 
-/* --- estética generada por canción --- */
-function hashStr(str){
-  let h = 0;
-  for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) >>> 0; }
-  return h;
-}
-function gradientFor(title){
-  const h = hashStr(title);
-  const hue1 = h % 360;
-  const hue2 = (hue1 + 55 + (h % 40)) % 360;
-  return `linear-gradient(155deg, hsl(${hue1} 65% 32%), hsl(${hue2} 70% 22%))`;
-}
-function initialsFor(title){
-  const clean = title.replace(/\.[a-zA-Z0-9]+$/,'').trim();
-  return clean.slice(0,2).toUpperCase();
-}
-function barsFor(title, count){
-  const h = hashStr(title);
-  let bars = [];
-  for(let i=0;i<count;i++){
-    const v = 20 + ((h >> (i%24)) & 0x3F) % 78;
-    bars.push(v);
-  }
-  return bars;
-}
-function renderWaveform(title){
-  const count = 48;
-  const bars = barsFor(title, count);
-  const html = bars.map(v => `<span style="height:${v}%"></span>`).join('');
-  wfBars.innerHTML = html;
-  wfBarsCopy.innerHTML = html;
-  wfProgress.style.width = '0%';
-}
-
+/* ========== LOGIN ========== */
 window.onload = () => {
   if(!window.google || !google.accounts){
     gateStatus.textContent = 'No se pudo cargar el login de Google. Revisa tu conexión y recarga.';
@@ -328,12 +376,10 @@ window.onload = () => {
       onSignedIn();
     }
   });
-
   document.getElementById('signinBtn').innerHTML =
-    '<button id="realSigninBtn" style="background:var(--accent);color:#161311;border:none;padding:10px 18px;border-radius:20px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;">Iniciar sesión con Google</button>';
+    '<button id="realSigninBtn" style="background:var(--accent);color:#1a1320;border:none;padding:10px 18px;border-radius:20px;font-family:inherit;font-weight:700;font-size:13px;cursor:pointer;">Iniciar sesión con Google</button>';
   document.getElementById('realSigninBtn').addEventListener('click', () => {
-    gateStatus.textContent = '';
-    gateStatus.classList.remove('err');
+    gateStatus.textContent = ''; gateStatus.classList.remove('err');
     tokenClient.requestAccessToken();
   });
 };
@@ -342,60 +388,212 @@ async function onSignedIn(){
   gate.classList.add('hidden');
   playerWrap.classList.remove('hidden');
   try{
-    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    });
+    const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', { headers: { Authorization: `Bearer ${accessToken}` } });
     const info = await res.json();
     whoEmail.textContent = info.email || '—';
-  }catch(e){
-    whoEmail.textContent = 'sesión activa';
-  }
-  loadTracks();
+  }catch(e){ whoEmail.textContent = 'sesión activa'; }
+  loadPlaylists();
+  loadFolderStructure();
 }
 
 signoutBtn.addEventListener('click', () => {
   if(accessToken){ google.accounts.oauth2.revoke(accessToken, () => {}); }
-  accessToken = null;
-  tracks = [];
-  currentIndex = -1;
-  audio.pause();
-  audio.src = '';
-  playerWrap.classList.add('hidden');
-  miniplayer.classList.add('hidden');
+  accessToken = null; tracks = []; currentIndex = -1;
+  audio.pause(); audio.src = '';
+  playerWrap.classList.add('hidden'); miniplayer.classList.add('hidden');
   gate.classList.remove('hidden');
 });
 
-reloadBtn.addEventListener('click', loadTracks);
+/* ========== NAVEGACIÓN DE VISTAS ========== */
+function showView(name){
+  [viewFolders, viewPlaylists, viewCreate, viewPlayer].forEach(v => v.classList.add('hidden'));
+  tabs.classList.toggle('hidden', name === 'create' || name === 'player');
+  if(name === 'folders') viewFolders.classList.remove('hidden');
+  if(name === 'playlists') viewPlaylists.classList.remove('hidden');
+  if(name === 'create') viewCreate.classList.remove('hidden');
+  if(name === 'player') viewPlayer.classList.remove('hidden');
+}
+tabFolders.addEventListener('click', () => {
+  tabFolders.classList.add('active'); tabPlaylists.classList.remove('active');
+  showView('folders');
+});
+tabPlaylists.addEventListener('click', () => {
+  tabPlaylists.classList.add('active'); tabFolders.classList.remove('active');
+  renderPlaylists();
+  showView('playlists');
+});
+backFromPlayer.addEventListener('click', () => {
+  showView(playlistsTabWasActive() ? 'playlists' : 'folders');
+});
+function playlistsTabWasActive(){ return tabPlaylists.classList.contains('active'); }
 
-async function loadTracks(){
-  trackList.innerHTML = '<div class="empty-list">Cargando pistas…</div>';
+/* ========== CARPETAS (DRIVE) ========== */
+async function loadFolderStructure(){
+  folderList.innerHTML = '<div class="empty-list">Cargando carpetas…</div>';
   try{
-    const q = encodeURIComponent(`'${FOLDER_ID}' in parents and mimeType contains 'audio/' and trashed = false`);
-    const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&orderBy=name&pageSize=200`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer ${accessToken}` } });
+    const qSub = encodeURIComponent(`'${ROOT_FOLDER_ID}' in parents and mimeType = 'application/vnd.google-apps.folder' and trashed = false`);
+    const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${qSub}&fields=files(id,name)&orderBy=name&pageSize=200`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
     if(!res.ok){
       if(res.status === 403 || res.status === 401){
-        trackList.innerHTML = '<div class="empty-list">Sin permiso para ver la carpeta. Confirma que tu cuenta esté agregada como usuario de prueba y que la carpeta esté compartida contigo.</div>';
-      } else {
-        trackList.innerHTML = '<div class="empty-list">Error al listar archivos ('+res.status+').</div>';
+        folderList.innerHTML = '<div class="empty-list">Sin permiso para ver la carpeta. Confirma que tu cuenta esté agregada como usuario de prueba y que la carpeta esté compartida contigo.</div>';
+      }else{
+        folderList.innerHTML = '<div class="empty-list">Error al listar carpetas ('+res.status+').</div>';
       }
       return;
     }
     const data = await res.json();
-    tracks = (data.files || []).map(f => ({ id: f.id, title: f.name }));
-    art.style.background = 'var(--panel)';
-    artTitle.textContent = '';
-    artTitle.className = 'art-empty';
-    artTitle.textContent = 'Elige una pista para empezar';
-    renderList();
+    subfolders = data.files || [];
+    renderFolderList();
+    loadLibraryAll(); // en segundo plano, para playlists
   }catch(e){
-    trackList.innerHTML = '<div class="empty-list">Error de red al listar la carpeta.</div>';
+    folderList.innerHTML = '<div class="empty-list">Error de red al listar la carpeta.</div>';
   }
 }
 
+function renderFolderList(){
+  let html = `
+    <div class="folder-card" data-type="all">
+      <div class="folder-icon all">★</div>
+      <div><div class="folder-name">Carpeta completa</div><div class="folder-sub">todas las canciones</div></div>
+    </div>`;
+  html += subfolders.map(f => `
+    <div class="folder-card" data-type="folder" data-id="${f.id}" data-name="${f.name}">
+      <div class="folder-icon">📁</div>
+      <div><div class="folder-name">${f.name}</div><div class="folder-sub">subcarpeta</div></div>
+    </div>`).join('');
+  folderList.innerHTML = html;
+
+  folderList.querySelectorAll('.folder-card').forEach(el => {
+    el.addEventListener('click', async () => {
+      if(el.dataset.type === 'all'){
+        await openQueueFromAllFolders();
+      }else{
+        await openQueueFromFolder(el.dataset.id, el.dataset.name);
+      }
+    });
+  });
+}
+
+async function fetchAudioFilesInFolder(folderId){
+  const q = encodeURIComponent(`'${folderId}' in parents and mimeType contains 'audio/' and trashed = false`);
+  const res = await fetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,createdTime)&orderBy=createdTime&pageSize=500`, {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  });
+  if(!res.ok) return [];
+  const data = await res.json();
+  return (data.files || []).map(f => ({ id: f.id, title: f.name }));
+}
+
+async function openQueueFromFolder(folderId, name){
+  trackList.innerHTML = '<div class="empty-list">Cargando canciones…</div>';
+  showView('player');
+  const files = await fetchAudioFilesInFolder(folderId);
+  startQueue(files, name);
+}
+
+async function openQueueFromAllFolders(){
+  trackList.innerHTML = '<div class="empty-list">Cargando canciones…</div>';
+  showView('player');
+  if(libraryAll.length === 0) await loadLibraryAll();
+  startQueue(libraryAll, 'Carpeta completa');
+}
+
+async function loadLibraryAll(){
+  const rootFiles = await fetchAudioFilesInFolder(ROOT_FOLDER_ID);
+  let all = [...rootFiles];
+  for(const f of subfolders){
+    const sub = await fetchAudioFilesInFolder(f.id);
+    all = all.concat(sub);
+  }
+  const seen = new Set();
+  libraryAll = all.filter(t => { if(seen.has(t.id)) return false; seen.add(t.id); return true; });
+}
+
+/* ========== PLAYLISTS (localStorage) ========== */
+function loadPlaylists(){
+  try{ playlists = JSON.parse(localStorage.getItem(PLAYLIST_KEY) || '[]'); }
+  catch(e){ playlists = []; }
+}
+function savePlaylistsToStorage(){
+  localStorage.setItem(PLAYLIST_KEY, JSON.stringify(playlists));
+}
+function renderPlaylists(){
+  if(playlists.length === 0){
+    playlistList.innerHTML = '<div class="empty-list">Aún no tienes playlists. Crea una con el botón de arriba.</div>';
+    return;
+  }
+  playlistList.innerHTML = playlists.map(p => `
+    <div class="folder-card" data-id="${p.id}">
+      <div class="folder-icon" style="background:${gradientFor(p.name)}">♪</div>
+      <div><div class="folder-name">${p.name}</div><div class="folder-sub">${p.tracks.length} canciones</div></div>
+      <button class="folder-del" data-del="${p.id}">✕</button>
+    </div>`).join('');
+  playlistList.querySelectorAll('.folder-card').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if(e.target.dataset.del !== undefined) return;
+      const p = playlists.find(pl => pl.id === el.dataset.id);
+      if(p) openQueueFromPlaylist(p);
+    });
+  });
+  playlistList.querySelectorAll('[data-del]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      playlists = playlists.filter(p => p.id !== btn.dataset.del);
+      savePlaylistsToStorage();
+      renderPlaylists();
+    });
+  });
+}
+function openQueueFromPlaylist(p){
+  showView('player');
+  startQueue(p.tracks, p.name);
+}
+
+newPlaylistBtn.addEventListener('click', async () => {
+  if(libraryAll.length === 0) await loadLibraryAll();
+  playlistNameInput.value = '';
+  pickList.innerHTML = libraryAll.map((t,i) => `
+    <div class="pick-item">
+      <input type="checkbox" id="pick-${i}" value="${t.id}" data-title="${t.title}">
+      <label for="pick-${i}">${t.title}</label>
+    </div>`).join('');
+  showView('create');
+});
+backFromCreate.addEventListener('click', () => { tabPlaylists.click(); });
+
+savePlaylistBtn.addEventListener('click', () => {
+  const name = playlistNameInput.value.trim();
+  if(!name){ playlistNameInput.focus(); return; }
+  const checked = Array.from(pickList.querySelectorAll('input[type=checkbox]:checked'));
+  if(checked.length === 0){ return; }
+  const selTracks = checked.map(c => ({ id: c.value, title: c.dataset.title }));
+  playlists.push({ id: 'pl_' + Date.now(), name, tracks: selTracks });
+  savePlaylistsToStorage();
+  tabPlaylists.click();
+});
+
+/* ========== REPRODUCCIÓN ========== */
+function startQueue(trackArr, label){
+  tracks = trackArr;
+  queueLabel = label;
+  queueTitle.textContent = label;
+  queueSub.textContent = tracks.length + ' canciones';
+  currentIndex = -1;
+  preloaded = { index: -1, url: null };
+  renderList();
+  if(tracks.length > 0) playIndex(0);
+}
+
+reloadBtn.addEventListener('click', () => {
+  if(queueLabel === 'Carpeta completa') openQueueFromAllFolders();
+  else loadFolderStructure();
+});
+
 function renderList(){
   if(tracks.length===0){
-    trackList.innerHTML = '<div class="empty-list">No se encontraron archivos de audio en la carpeta.</div>';
+    trackList.innerHTML = '<div class="empty-list">No se encontraron canciones.</div>';
     return;
   }
   trackList.innerHTML = tracks.map((t,i)=>`
@@ -428,12 +626,10 @@ async function playIndex(i){
   miniTitle.textContent = title;
 
   const spin = document.getElementById('spin-'+i);
-
   try{
     let blobUrl;
     if(preloaded.index === i && preloaded.url){
-      blobUrl = preloaded.url;
-      preloaded = { index: -1, url: null };
+      blobUrl = preloaded.url; preloaded = { index: -1, url: null };
     }else{
       if(spin) spin.textContent = 'cargando…';
       blobUrl = await fetchTrackBlob(tracks[i].id);
@@ -460,19 +656,14 @@ async function preloadNext(i){
   if(preloaded.index === nextIndex) return;
   try{
     const url = await fetchTrackBlob(tracks[nextIndex].id);
-    if(currentIndex === i){
-      preloaded = { index: nextIndex, url };
-    }else{
-      URL.revokeObjectURL(url);
-    }
-  }catch(e){
-    console.error('No se pudo precargar la siguiente pista:', e);
-  }
+    if(currentIndex === i){ preloaded = { index: nextIndex, url }; }
+    else{ URL.revokeObjectURL(url); }
+  }catch(e){ console.error('No se pudo precargar la siguiente pista:', e); }
 }
 
 function updateMediaSession(title){
   if(!('mediaSession' in navigator)) return;
-  navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: 'Tocadiscos' });
+  navigator.mediaSession.metadata = new MediaMetadata({ title: title, artist: queueLabel || 'Tocadiscos' });
   navigator.mediaSession.setActionHandler('play', () => audio.play());
   navigator.mediaSession.setActionHandler('pause', () => audio.pause());
   navigator.mediaSession.setActionHandler('previoustrack', () => prevBtn.click());
@@ -481,16 +672,11 @@ function updateMediaSession(title){
 
 function setPlayingUI(playing){
   const icon = playing ? '❚❚' : '▶';
-  playBtn.textContent = icon;
-  miniPlayBtn.textContent = icon;
+  playBtn.textContent = icon; miniPlayBtn.textContent = icon;
   if('mediaSession' in navigator) navigator.mediaSession.playbackState = playing ? 'playing' : 'paused';
 }
-
 function togglePlay(){
-  if(currentIndex===-1){
-    if(tracks.length>0) playIndex(0);
-    return;
-  }
+  if(currentIndex===-1){ if(tracks.length>0) playIndex(0); return; }
   if(audio.paused) audio.play(); else audio.pause();
 }
 playBtn.addEventListener('click', togglePlay);
@@ -500,26 +686,18 @@ document.getElementById('miniNextBtn').addEventListener('click', ()=> nextBtn.cl
 function pickNextIndex(){
   if(shuffleOn){
     if(tracks.length <= 1) return currentIndex;
-    let idx;
-    do{ idx = Math.floor(Math.random()*tracks.length); }while(idx === currentIndex);
+    let idx; do{ idx = Math.floor(Math.random()*tracks.length); }while(idx===currentIndex);
     return idx;
   }
   return currentIndex + 1;
 }
 prevBtn.addEventListener('click', ()=>{ if(currentIndex>0) playIndex(currentIndex-1); });
-nextBtn.addEventListener('click', ()=>{
-  const n = pickNextIndex();
-  if(n < tracks.length) playIndex(n);
-});
-
-shuffleBtn.addEventListener('click', ()=>{
-  shuffleOn = !shuffleOn;
-  shuffleBtn.classList.toggle('active', shuffleOn);
-});
+nextBtn.addEventListener('click', ()=>{ const n = pickNextIndex(); if(n < tracks.length) playIndex(n); });
+shuffleBtn.addEventListener('click', ()=>{ shuffleOn = !shuffleOn; shuffleBtn.classList.toggle('active', shuffleOn); });
 repeatBtn.addEventListener('click', ()=>{
-  repeatMode = repeatMode === 'off' ? 'all' : repeatMode === 'all' ? 'one' : 'off';
-  repeatBtn.textContent = repeatMode === 'one' ? '↻¹' : '↻';
-  repeatBtn.classList.toggle('active', repeatMode !== 'off');
+  repeatMode = repeatMode==='off' ? 'all' : repeatMode==='all' ? 'one' : 'off';
+  repeatBtn.textContent = repeatMode==='one' ? '↻¹' : '↻';
+  repeatBtn.classList.toggle('active', repeatMode!=='off');
 });
 
 audio.addEventListener('play', ()=>setPlayingUI(true));
@@ -528,16 +706,14 @@ audio.addEventListener('ended', ()=>{
   if(repeatMode === 'one'){ playIndex(currentIndex); return; }
   let n = pickNextIndex();
   if(n >= tracks.length){
-    if(repeatMode === 'all'){ n = 0; }
-    else { setPlayingUI(false); return; }
+    if(repeatMode === 'all'){ n = 0; } else { setPlayingUI(false); return; }
   }
   playIndex(n);
 });
 audio.addEventListener('error', (e)=>{ console.error('Error de audio:', audio.error); });
 audio.addEventListener('timeupdate', ()=>{
   if(audio.duration){
-    const pct = (audio.currentTime/audio.duration)*100;
-    wfProgress.style.width = pct + '%';
+    wfProgress.style.width = (audio.currentTime/audio.duration)*100 + '%';
     tCur.textContent = fmt(audio.currentTime);
     tDur.textContent = fmt(audio.duration);
   }
@@ -545,8 +721,7 @@ audio.addEventListener('timeupdate', ()=>{
 waveform.addEventListener('click', (e)=>{
   if(!audio.duration) return;
   const rect = waveform.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  audio.currentTime = pct * audio.duration;
+  audio.currentTime = ((e.clientX - rect.left) / rect.width) * audio.duration;
 });
 </script>
 </body>
